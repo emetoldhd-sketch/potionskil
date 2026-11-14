@@ -7,12 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
-      - run: unzip -q PotionSkill-source (1).zip
-      - run: cd PotionSkill && mvn -B clean package
+      - name: Lihat isi repository
+        run: |
+          ls -la
+          file *.zip || true
+      - name: Extract zip
+        run: |
+          ZIP=$(ls PotionSkill-source*.zip | head -n 1)
+          echo "Memakai: $ZIP"
+          unzip -o "$ZIP"
+      - name: Build
+        run: cd PotionSkill && mvn -B clean package
       - uses: actions/upload-artifact@v4
         with:
           name: PotionSkill-jar
